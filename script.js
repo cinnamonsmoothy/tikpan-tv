@@ -99,6 +99,7 @@ function setMobileMenu(open, restoreFocus = true) {
   menuToggle.setAttribute('aria-expanded', String(open));
   menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   if (open) {
+    window.dispatchEvent(new Event('tikpan-menu-open'));
     mobileNav.hidden = false;
     mobileHeader.classList.add('has-mobile-menu');
     document.body.classList.add('menu-open');
@@ -227,7 +228,7 @@ const random = () => {
 };
 starFields.forEach(starField => {
   const stars = document.createDocumentFragment();
-  const count = starField.classList.contains('about-stories-stars') ? 160 : starField.classList.contains('intertitle-stars') ? 110 : 76;
+  const count = window.innerWidth <= 700 && starField.closest('.hero-journey') ? 32 : starField.classList.contains('about-stories-stars') ? 160 : starField.classList.contains('intertitle-stars') ? 110 : 76;
   for (let index = 0; index < count; index++) {
     const star = document.createElement('i');
     star.style.setProperty('--x', `${(random() * 100).toFixed(2)}%`);

@@ -4,6 +4,45 @@ const $$ = selector => [...document.querySelectorAll(selector)];
 const radioPanel=$('#radio-panel'), radioTrigger=$('#radio-trigger');
 let audio=$('#tikpan-audio');
 const radioButton=$('#radio-play'), radioExpand=$('#radio-expand');
+const volumeSlider=$('#radio-volume');
+let listenerVolume=Number(volumeSlider.value)/100;
+let audioContext, gainNode, mediaSource;
+const AudioContextClass=window.AudioContext || window.webkitAudioContext;
+function applyVolume(){
+  if(gainNode){
+    volumeSlider.hidden=false;
+    $('#radio-volume-wrap').firstChild.textContent='Volume ';
+    audio.volume=1;
+    gainNode.gain.setValueAtTime(listenerVolume,audioContext.currentTime);
+  }else{
+    audio.volume=listenerVolume;
+    // Some mobile browsers reserve native volume for the hardware buttons.
+    if(Math.abs(audio.volume-listenerVolume)>.01){
+      volumeSlider.hidden=true;
+      $('#radio-volume-wrap').firstChild.textContent='Use your phone volume buttons';
+    }
+  }
+}
+function connectAudio(el){
+  if(!AudioContextClass){applyVolume();return Promise.resolve();}
+  try{
+    if(!audioContext){
+      audioContext=new AudioContextClass();
+      gainNode=audioContext.createGain();
+      gainNode.connect(audioContext.destination);
+    }
+    mediaSource=audioContext.createMediaElementSource(el);
+    mediaSource.connect(gainNode);
+    applyVolume();
+    // Resume synchronously within the Play gesture, as required by mobile Safari.
+    return audioContext.resume();
+  }catch(error){
+    if(mediaSource)throw error;
+    gainNode=null;
+    applyVolume();
+    return Promise.resolve();
+  }
+}
 function playbackUI(state, label){
   radioButton.dataset.state=state;
   radioButton.setAttribute('aria-label',label);
@@ -21,7 +60,9 @@ function radioStatus(message){$('#radio-status').textContent=message;}
 function setupRadio(){
   if(radioState.initialised)return;
   radioState.initialised=true;
-  audio.preload='none';audio.volume=.8;
+  audio.preload='none';
+  audio.volume=AudioContextClass?1:listenerVolume;
+  if(!AudioContextClass)applyVolume();
   radioButton.disabled=false;
   playbackUI('stopped','Play live radio');
   radioStatus('Ready to listen live');
@@ -36,14 +77,16 @@ function showRadioStopped(message='Paused — press Play to rejoin live'){
 function discardAudio(){
   const old=audio;
   // Save the listener's volume, but none of the old playback state or buffer.
-  const volume=Number.isFinite(old.volume)?old.volume:.8;
+  if(mediaSource){mediaSource.disconnect();mediaSource=null;}
   old.pause();
   old.removeAttribute('src');
   old.load(); // Aborts the old HTTP response.
   const fresh=document.createElement('audio');
   fresh.id='tikpan-audio';
   fresh.preload='none';
-  fresh.volume=volume;
+  fresh.volume=gainNode?1:listenerVolume;
+  if(AudioContextClass)fresh.crossOrigin='anonymous';
+  fresh.setAttribute('playsinline','');
   old.replaceWith(fresh); // Old media element cannot be resumed.
   audio=fresh;
   return fresh;
@@ -89,12 +132,17 @@ radioButton.addEventListener('click',async()=>{
   playbackUI('connecting', 'Stop connecting');
   attachAudioEvents(fresh,generation);
   fresh.src=(RADIO_RELAY_URL || RADIO_DIRECT_URL)+'?live='+Date.now()+'-'+generation;
-  try{await fresh.play();}
+  try{
+    const ready=connectAudio(fresh);
+    const playback=fresh.play();
+    await Promise.all([ready,playback]);
+  }
   catch(e){playbackFailure(generation);}
   finally{if(radioState.generation===generation)radioState.connecting=false;}
 });
-$('#radio-volume').addEventListener('input',e=>{audio.volume=Number(e.target.value)/100});
+volumeSlider.addEventListener('input',e=>{listenerVolume=Number(e.target.value)/100;applyVolume()});
 function setRadio(open){radioPanel.classList.toggle('open',open);radioTrigger.setAttribute('aria-expanded',String(open));radioTrigger.setAttribute('aria-label',open?'Close live radio player':'Open live radio player');radioPanel.setAttribute('aria-hidden',String(!open));radioPanel.inert=!open;radioExpand.setAttribute('aria-expanded',String(open));radioExpand.setAttribute('aria-label',open?'Collapse radio details':'Expand radio details')}
+window.addEventListener('tikpan-menu-open',()=>setRadio(false));
 radioTrigger.addEventListener('click',()=>setRadio(!radioPanel.classList.contains('open')));
 radioExpand.addEventListener('click',()=>setRadio(!radioPanel.classList.contains('open')));
 $('#radio-close').addEventListener('click',()=>{setRadio(false);radioTrigger.focus()});

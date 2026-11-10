@@ -32,4 +32,9 @@ GitHub scheduled runs can be delayed, and public-repository schedules may be dis
 Validation: `node --test scripts/sync-youtube.test.mjs`.
 
 
-The shared footer source is `components/site-footer.html`. Edit it once and run `node scripts/render-footer.mjs` to update both local pages. The Pages build also renders it automatically before packaging. The generated HTML remains usable when opened directly, with no runtime fetch or local server. Footer credit is centred on desktop and mobile; the About footer inherits the surrounding stories background. The home hero uses a shorter scroll journey (950svh desktop, 720svh mobile).
+The shared footer source is `components/site-footer.html`. Edit it once and run `node scripts/render-footer.mjs` to update both local pages. The Pages build also renders it automatically before packaging. The generated HTML remains usable when opened directly, with no runtime fetch or local server. Footer credit is centred on desktop and mobile; the About footer inherits the surrounding stories background. The home hero uses a shorter scroll journey (820svh desktop, 620svh mobile).
+
+
+On screens up to 700px, the home hero uses `assets/globe/earth-mobile.webp`, exported from the original renderer with Africa facing forward. `hero-globe.js` loads the map bundle and animated globe only on desktop. Mobile uses a still image, fewer static stars and a compact hero layout above the full-width radio dock. Desktop keeps the interactive globe; it pauses when resized down to mobile.
+
+The radio uses a lazily created Web Audio gain control to change volume on mobile browsers that ignore media-element volume. The stream is requested anonymously with CORS; Zeno's live stream was checked to return `Access-Control-Allow-Origin: *`. The audio context starts only after a Play gesture. Volume is preserved across pause/reconnect. If Web Audio is unavailable and native volume is locked, the panel directs the listener to the phone's volume buttons.

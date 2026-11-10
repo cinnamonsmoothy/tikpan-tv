@@ -332,7 +332,7 @@
   }
 
   function render(now) {
-    if (!texture) return;
+    if (!texture || (!coverageMode && window.innerWidth <= 700)) return;
     const p = progress();
     if (!coverageMode && p > .008 && !scrolling) {
       scrollLon = lon;
@@ -419,11 +419,12 @@
     context.setTransform(dpr, 0, 0, dpr, 0, 0);
     updateCoverageProgress();
     render(performance.now());
+    start();
   }
 
   function animate(now) {
     frame = 0;
-    if (!visible || document.hidden || (!coverageMode && progress() >= .88)) return;
+    if (!visible || document.hidden || (!coverageMode && (window.innerWidth <= 700 || progress() >= .88))) return;
     const dt = Math.min((now - lastTime) / 1000, .05);
     lastTime = now;
     if (coverageMode && coverageReturning && !dragging && !reducedMotion.matches) {
@@ -452,7 +453,7 @@
     if (!reducedMotion.matches) frame = requestAnimationFrame(animate);
   }
   function start() {
-    if (!texture || frame || !visible || document.hidden || reducedMotion.matches) return;
+    if (!texture || frame || !visible || document.hidden || reducedMotion.matches || (!coverageMode && window.innerWidth <= 700)) return;
     lastTime = performance.now();
     frame = requestAnimationFrame(animate);
   }
