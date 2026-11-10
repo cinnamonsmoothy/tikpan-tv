@@ -1,0 +1,2 @@
+# Preserve the decoder bundle byte-for-byte, including its embedded WASM.
+assets/radio/mpg123-decoder.min.js -text -diff

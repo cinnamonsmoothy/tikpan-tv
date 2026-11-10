@@ -156,6 +156,16 @@ function updateHeroScroll() {
   const progress = reducedMotion.matches ? 0 : clamp(-bounds.top / travel);
   const exit = reducedMotion.matches ? 0 : clamp((window.innerHeight - bounds.bottom) / (window.innerHeight * .68));
   window.tikpanHeroProgress = progress;
+  if (window.innerWidth <= 700) {
+    const globe = document.getElementById('globe-stage');
+    const approach = smooth(.14, .6, progress);
+    const zoom = smooth(.29, .78, progress);
+    const size = Math.max(1, globe.offsetHeight);
+    const centreShift = window.innerHeight / 2 - globe.offsetTop - size / 2;
+    const fullScale = Math.max(window.innerWidth, window.innerHeight) * 2.36 / size;
+    heroScene.style.setProperty('--mobile-earth-shift', `${(centreShift * approach).toFixed(1)}px`);
+    heroScene.style.setProperty('--mobile-earth-zoom', (1 + (fullScale - 1) * zoom).toFixed(3));
+  }
   heroScene.classList.toggle('is-journeying', progress > .015);
   const reveal = smooth(.78, .94, progress);
   const starDrift = reducedMotion.matches ? 0 : smooth(.66, .98, progress) * window.innerHeight * -.3;

@@ -1,0 +1,9 @@
+mpg123-decoder 1.0.2
+Source: https://github.com/eshaz/wasm-audio-decoders
+Package: https://registry.npmjs.org/mpg123-decoder/1.0.2
+License: MIT
+Integrity: sha512-cw0Laz57gumQsfCqnNeGtgq64EcyrK/z4qx+kq4iba7iSSXfI7uO3jiHjdHxNp4PB2v08VZYZ2Fr68VM1JkaPQ==
+
+Copyright 2021-2025 Ethan Halsall. Wrapper source is MIT licensed.
+The bundled mpg123 decoder has its own LGPL license; see mpg123-COPYING.txt.
+Corresponding source and build instructions: https://github.com/eshaz/wasm-audio-decoders/tree/main/modules/mpg123 and https://github.com/eshaz/wasm-audio-decoders/blob/main/Makefile
