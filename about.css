@@ -127,3 +127,6 @@
   .coverage-globe-journey{height:auto}
   .coverage-globe-scene{position:relative;top:auto;height:auto}
 }
+
+/* Match the stories section so the footer has no visible colour seam. */
+.about-page{--footer-background:#030303}

@@ -1,4 +1,6 @@
+import { renderFooters } from './render-footer.mjs';
 import { cp, mkdir, readdir } from 'node:fs/promises';
+await renderFooters();
 const root = new URL('../', import.meta.url);
 const output = new URL('../_site/', import.meta.url);
 await mkdir(output, {recursive:true});

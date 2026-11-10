@@ -30,3 +30,6 @@ The build publishes public root assets plus `assets/`. It excludes the old websi
 GitHub scheduled runs can be delayed, and public-repository schedules may be disabled after 60 days without repository activity. Check the Actions tab if updates stop. See https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule.
 
 Validation: `node --test scripts/sync-youtube.test.mjs`.
+
+
+The shared footer source is `components/site-footer.html`. Edit it once and run `node scripts/render-footer.mjs` to update both local pages. The Pages build also renders it automatically before packaging. The generated HTML remains usable when opened directly, with no runtime fetch or local server. Footer credit is centred on desktop and mobile; the About footer inherits the surrounding stories background. The home hero uses a shorter scroll journey (950svh desktop, 720svh mobile).

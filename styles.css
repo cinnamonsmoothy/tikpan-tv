@@ -127,7 +127,7 @@ html{scroll-snap-type:none}
 @media(prefers-reduced-motion:reduce){.hero-stars i{animation:none}.globe-fallback{transition:none}}
 
 /* Scroll journey: one compact approach, a black title beat, then the stories. */
-.hero-journey{position:relative;height:1250svh;background:#05070b}
+.hero-journey{position:relative;height:950svh;background:#05070b}
 .hero-journey .hero-globe{position:sticky;top:0;height:100svh;min-height:100svh;--copy-opacity:1;--copy-rise:0px;--scene-opacity:1;--curtain-opacity:0;--title-opacity:0;--title-rise:45px;--line-scale:0;--fallback-scale:1}
 .hero-journey .globe-stage{inset:0;width:100%;height:100%}
 .hero-journey .hero-globe.is-journeying .globe-stage{cursor:default}
@@ -154,7 +154,7 @@ html{scroll-snap-type:none}
 .featured-section{z-index:6;margin-top:-24svh;background:#05070b}
 @media(max-width:1100px){.hero-journey .globe-stage{width:100%;right:0}.hero-journey .globe-fallback{width:54%}}
 @media(max-width:700px){
-  .hero-journey{height:920svh}
+  .hero-journey{height:720svh}
   .hero-journey .hero-globe{height:100svh;min-height:100svh}
   .hero-journey .globe-stage{top:0;right:0;width:100%;height:100%}
   .hero-journey .globe-fallback{top:50px;right:0;width:100%;height:49svh;transform-origin:50% 40%}
@@ -488,3 +488,13 @@ body{color:#f1f3f6}
 .loader-logo-wrap:after{content:"";position:absolute;inset:0 auto 0 -40%;width:38%;background:linear-gradient(112deg,transparent 4%,rgba(255,255,255,.2) 32%,#fff 49%,rgba(255,255,255,.45) 56%,transparent 78%);mix-blend-mode:screen;filter:blur(.7px);pointer-events:none;mask-image:url('Tikpan%20TV%20Modernised%20Logo.png');mask-repeat:no-repeat;mask-position:center;mask-size:contain;-webkit-mask-image:url('Tikpan%20TV%20Modernised%20Logo.png');-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-size:contain;animation:loader-logo-glint 2.25s ease-in-out .08s infinite}
 @keyframes loader-logo-glint{0%,8%{transform:translateX(-150%) skewX(-18deg);opacity:0}17%{opacity:1}52%,100%{transform:translateX(430%) skewX(-18deg);opacity:0}}
 @media(prefers-reduced-motion:reduce){.loader-logo-wrap:after{display:none}}
+
+/* Equal side columns keep the shared credit at the centre of the page. */
+.site-footer{background:var(--footer-background,#050505)}
+.footer-bottom{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:1rem}
+.footer-bottom>.footer-copyright{grid-column:1;justify-self:start}
+.footer-bottom>.footer-credit{grid-column:2;justify-self:center;text-align:center}
+@media(max-width:700px){
+ .footer-bottom{grid-template-columns:1fr;justify-items:center;gap:.75rem;text-align:center}
+ .footer-bottom>.footer-copyright,.footer-bottom>.footer-credit{grid-column:1;justify-self:center;text-align:center}
+}
