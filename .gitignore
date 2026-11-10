@@ -1,0 +1,10 @@
+_site/
+.env
+.env.*
+.dev.vars
+*.tmp
+
+.agents/
+.aws/
+.codex/
+tikpan-tv-old-site/

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" class="preloading">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030303">
+  <meta name="description" content="Tikpan TV connects Africa through authentic storytelling. Explore culture, news and development from Ghana to the world.">
+  <title>Tikpan TV — Stories without borders</title>
+  <link rel="icon" type="image/png" href="Tikpan%20TV%20Modernised%20Logo.png">
+  <link rel="preconnect" href="https://www.youtube-nocookie.com">
+  <link rel="stylesheet" href="styles.css?v=footer-highlight-match-5">
+  <script defer src="assets/globe/globe-data.js?v=globe-journey-10"></script>
+  <script defer src="video-catalog.js?v=video-archive-1"></script>
+  <script defer src="script.js?v=startup-footer-reveal-2"></script>
+  <script defer src="globe-software.js?v=africa-glow-6"></script>
+  <link rel="stylesheet" href="radio.css?v=5">
+  <script defer src="radio.js?v=3"></script>
+</head>
+<body>
+  <div class="site-loader" id="site-loader" role="dialog" aria-modal="true" aria-labelledby="loader-title">
+    <div class="hero-stars loader-stars" aria-hidden="true"></div>
+    <div class="loader-content">
+      <span class="loader-logo-wrap"><img class="loader-logo" src="Tikpan%20TV%20Modernised%20Logo.png" alt="Tikpan TV"></span>
+      <h1 id="loader-title">BRINGING YOU THE STORIES</h1>
+      <div class="loader-progress" role="progressbar" aria-label="Loading intro" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="loader-progress-fill"></span></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const loader = document.getElementById('site-loader');
+      const fill = document.getElementById('loader-progress-fill');
+      const progressBar = document.querySelector('.loader-progress');
+      if (!loader || !fill || !progressBar) {
+        root.classList.remove('preloading');
+        return;
+      }
+      const start = performance.now();
+      let finished = false;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        fill.style.width = '100%';
+        progressBar.setAttribute('aria-valuenow', '100');
+        root.classList.remove('preloading');
+        loader.classList.add('is-done');
+        loader.setAttribute('aria-hidden', 'true');
+        loader.setAttribute('aria-modal', 'false');
+        setTimeout(() => { loader.hidden = true; }, 500);
+      }
+      function animate(now) {
+        if (finished) return;
+        const progress = Math.min((now - start) / 1400, 1);
+        fill.style.width = `${Math.round(progress * 100)}%`;
+        progressBar.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+        if (progress >= 1) finish();
+        else requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+      setTimeout(finish, 2400);
+    })();
+  </script>
+  <a class="skip-link" href="#featured">Skip to stories</a>
+  <header class="site-header" id="site-header">
+    <a class="brand" href="#top" aria-label="Tikpan TV home"><img src="Tikpan%20TV%20Modernised%20Logo.png" alt="Tikpan TV"></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#featured">Watch</a><a href="about.html">About</a><a href="#radio">Tikpan Radio</a>
+    </nav>
+    <a class="header-cta" href="https://www.youtube.com/@TikpanTV" target="_blank" rel="noopener noreferrer">Tikpan TV</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu"><span></span><span></span></button>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden>
+      <div class="hero-stars menu-stars" aria-hidden="true"></div>
+      <img class="mobile-nav-satellite" src="assets/tikpan%20satellite.png" alt="" aria-hidden="true">
+      <div class="mobile-nav-links">
+        <a href="#featured"><span class="menu-link-label">Watch</span><span class="menu-link-detail">Stories &amp; perspectives</span></a>
+        <a href="about.html"><span class="menu-link-label">About</span><span class="menu-link-detail">Who we are</span></a>
+        <a href="#radio"><span class="menu-link-label">Tikpan Radio</span><span class="menu-link-detail">The sound of Africa</span></a>
+        <a href="https://www.youtube.com/@TikpanTV" target="_blank" rel="noopener noreferrer"><span class="menu-link-label">Tikpan TV</span><span class="menu-link-detail">Watch on YouTube</span></a>
+      </div>
+      <p class="mobile-nav-signoff">Africa has a story.<br><em>We say the facts.</em></p>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero-journey" id="hero">
+    <section class="hero-globe" aria-label="Tikpan TV — Africa's stories without borders">
+      <div class="hero-stars" id="hero-stars" aria-hidden="true"></div>
+      <div class="globe-stage" id="globe-stage" role="group" tabindex="0" aria-label="Interactive Earth globe. Use a pointer or arrow keys to rotate it; scroll to zoom into Africa.">
+        <div class="globe-fallback" aria-hidden="true"></div>
+        <div class="globe-canvas" id="globe-canvas"></div>
+        <div class="globe-glow" aria-hidden="true"></div>
+      </div>
+      <div class="globe-copy">
+        <h1>Africa has a<br>story.<br><em>We say the facts.</em></h1>
+        <p>Culture, news and development through a lens rooted in Africa.<span class="hero-copy-tagline">Real voices. Wider perspectives.</span></p>
+        <div class="globe-actions"><a class="hero-watch cta-playback" href="https://www.youtube.com/@TikpanTV" target="_blank" rel="noopener noreferrer"><span class="cta-label">Watch Tikpan TV</span></a><a class="globe-text-link" href="#featured">Explore the stories</a></div>
+      </div>
+      <div class="hero-curtain" aria-hidden="true"></div>
+      <div class="hero-intertitle" aria-hidden="true"><div class="hero-stars intertitle-stars"></div><div class="hero-intertitle-inner"><img class="hero-intertitle-logo" src="Tikpan%20TV%20Modernised%20Logo.png" alt=""><span class="hero-intertitle-line"></span><h2>Stories worth<br><em>staying for.</em></h2></div></div>
+    </section>
+    </div>
+
+    <section class="featured-section" id="featured">
+      <div class="hero-stars featured-stars" aria-hidden="true"></div>
+      <div class="section-inner">
+        <div class="section-heading featured-heading">
+          <div><h2>Featured<br><em>Stories.</em></h2></div>
+          <div class="featured-intro">
+            <p>The latest from Tikpan TV.<br>Keep exploring for more stories from the channel.</p>
+            <a class="solid-button featured-channel-cta cta-playback" href="https://www.youtube.com/@TikpanTV/videos" target="_blank" rel="noopener noreferrer"><span class="cta-label">Explore the channel</span></a>
+          </div>
+        </div>
+        <div class="featured-grid" id="featured-grid"></div>
+        <div class="featured-more-grid" id="featured-more-grid"></div>
+        <div class="featured-load">
+          <button class="outline-button featured-load-button" id="featured-load-button" type="button" aria-controls="featured-more-grid"><span class="load-more-label">LOAD MORE</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about">
+      <div class="about-image"><img src="Tikpan%20TV%20Building.png" alt="Tikpan TV logo on a modern glass building" loading="lazy"><div class="image-caption">A wider view. A closer connection.</div></div>
+      <div class="about-content"><div class="hero-stars homepage-about-stars" aria-hidden="true"></div><h2>Rooted in Africa.<br><em>Connected to the world.</em></h2><p class="lead">Tikpan TV tells stories that carry our voices further.</p><p>From culture and current affairs to development and everyday life, Tikpan TV brings together the voices, perspectives and conversations shaping Africa and its communities around the world.</p><a class="globe-text-link about-cta" href="about.html">Get to know Tikpan TV</a></div>
+    </section>
+
+    <section class="radio-section" id="radio">
+      <video class="radio-backdrop" aria-hidden="true" autoplay muted loop playsinline preload="metadata">
+        <source src="assets/Tikpan%20Radio/soundwavestikpan.mp4" type="video/mp4">
+      </video>
+      <div class="radio-backdrop-overlay" aria-hidden="true"></div>
+      <div class="section-inner radio-inner">
+        <div class="radio-copy">
+          <div class="eyebrow">Tikpan Radio</div>
+          <h2>The sound of Africa.<br><em>In every frequency.</em></h2>
+          <p>From timeless classics to fresh new sounds, Tikpan Radio brings together the genres, rhythms and moods of Africa. Different sounds for every kind of listener.</p>
+          <a class="radio-button" data-open-radio href="#radio-panel" aria-controls="radio-panel"><span class="radio-button-color color-navy" aria-hidden="true"></span><span class="radio-button-color color-blue" aria-hidden="true"></span><span class="radio-button-color color-cyan" aria-hidden="true"></span><span class="radio-button-label">Listen to Tikpan Radio</span></a>
+        </div>
+        <div class="radio-art">
+          <div class="radio-mark" role="img" aria-label="Tikpan Radio logo">
+            <span class="radio-pulse" aria-hidden="true"></span>
+            <span class="radio-pulse radio-pulse--second" aria-hidden="true"></span>
+            <span class="radio-disc radio-disc--outer" aria-hidden="true"></span>
+            <span class="radio-disc radio-disc--middle" aria-hidden="true"></span>
+            <span class="radio-disc radio-disc--inner" aria-hidden="true"></span>
+            <span class="radio-piece radio-piece--label" data-parallax=".8" aria-hidden="true"><img src="assets/Tikpan%20Radio/parallax/radio.png" alt="" draggable="false" loading="lazy"></span>
+            <span class="radio-piece radio-piece--mic" data-parallax="1" aria-hidden="true"><img src="assets/Tikpan%20Radio/parallax/microphone.png" alt="" draggable="false" loading="lazy"></span>
+            <span class="radio-piece radio-piece--signal" data-parallax="1.35" aria-hidden="true"><img src="assets/Tikpan%20Radio/parallax/signal.png" alt="" draggable="false" loading="lazy"></span>
+            <span class="radio-piece radio-piece--word" data-parallax=".72" aria-hidden="true"><img src="assets/Tikpan%20Radio/parallax/wordmark.png" alt="" draggable="false" loading="lazy"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing-section homepage-closing"><div class="closing-backdrop" aria-hidden="true"></div><div class="hero-stars closing-stars" aria-hidden="true"></div><div class="section-inner closing-inner"><h2>There’s more<br>to the <em>story.</em></h2><p>Join us as we keep telling Africa’s stories, one perspective at a time.</p><a class="solid-button cta-playback" href="https://www.youtube.com/@TikpanTV" target="_blank" rel="noopener noreferrer"><span class="cta-label">Watch Tikpan TV on YouTube</span></a></div></section>
+  </main>
+  <footer class="site-footer"><div class="hero-stars site-footer-stars" aria-hidden="true"></div><div class="footer-top"><a class="footer-brand" href="#top" aria-label="Tikpan TV, back to top"><img src="Tikpan%20TV%20Modernised%20Logo.png" alt="Tikpan TV"></a><p>Connecting Africa through authentic storytelling.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="#top">Home</a><a href="about.html#top">About</a><a href="#radio">Tikpan Radio</a><a href="https://www.youtube.com/@TikpanTV" target="_blank" rel="noopener noreferrer">Tikpan TV</a></nav><div class="footer-bottom"><span class="footer-copyright">TIKPAN TV 2026</span><a class="footer-credit" href="https://sitehoney.co.uk/" target="_blank" rel="noopener noreferrer">made with <span class="footer-heart" aria-hidden="true">♥</span> by sitehoney</a></div></footer>
+
+  <dialog class="video-dialog" id="video-dialog" aria-label="Tikpan TV video"><div class="dialog-top"><span>TIKPAN TV <i></i> NOW PLAYING</span><button id="dialog-close" type="button" aria-label="Close video">Close <span aria-hidden="true">×</span></button></div><div class="player-wrap" id="player-wrap"></div><div class="dialog-bottom"><h3 id="dialog-title"></h3><a id="dialog-youtube" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div></dialog>
+  <aside class="radio-widget" id="radio-widget" aria-label="Tikpan Radio player"><div class="radio-panel" id="radio-panel" role="region" aria-label="Live radio controls" aria-hidden="true" inert><div class="radio-panel-head"><div><div class="onair"><i aria-hidden="true"></i> Live</div></div><button class="panel-close" id="radio-close" aria-label="Close radio player">×</button></div><div class="radio-listen-body">
+          <div class="radio-signal"><div class="radio-frequency" aria-hidden="true"><i style="--bar-height:15%;--bar-delay:-0ms"></i><i style="--bar-height:26%;--bar-delay:-137ms"></i><i style="--bar-height:42%;--bar-delay:-274ms"></i><i style="--bar-height:25%;--bar-delay:-411ms"></i><i style="--bar-height:56%;--bar-delay:-548ms"></i><i style="--bar-height:38%;--bar-delay:-685ms"></i><i style="--bar-height:70%;--bar-delay:-822ms"></i><i style="--bar-height:48%;--bar-delay:-959ms"></i><i style="--bar-height:84%;--bar-delay:-1096ms"></i><i style="--bar-height:60%;--bar-delay:-133ms"></i><i style="--bar-height:95%;--bar-delay:-270ms"></i><i style="--bar-height:72%;--bar-delay:-407ms"></i><i style="--bar-height:100%;--bar-delay:-544ms"></i><i style="--bar-height:80%;--bar-delay:-681ms"></i><i style="--bar-height:62%;--bar-delay:-818ms"></i><i style="--bar-height:90%;--bar-delay:-955ms"></i><i style="--bar-height:55%;--bar-delay:-1092ms"></i><i style="--bar-height:78%;--bar-delay:-129ms"></i><i style="--bar-height:44%;--bar-delay:-266ms"></i><i style="--bar-height:66%;--bar-delay:-403ms"></i><i style="--bar-height:35%;--bar-delay:-540ms"></i><i style="--bar-height:52%;--bar-delay:-677ms"></i><i style="--bar-height:28%;--bar-delay:-814ms"></i><i style="--bar-height:40%;--bar-delay:-951ms"></i><i style="--bar-height:22%;--bar-delay:-1088ms"></i><i style="--bar-height:14%;--bar-delay:-125ms"></i></div><img class="radio-station-art" src="assets/Tikpan%20Radio%20Logo.png" alt="Tikpan Radio"></div>
+          <audio id="tikpan-audio" preload="none"></audio>
+          <div class="radio-sr-only" id="radio-status" role="status" aria-live="polite"></div>
+          <label class="radio-volume-control" id="radio-volume-wrap">Volume <input id="radio-volume" type="range" min="0" max="100" value="80"></label>
+        </div><div class="radio-panel-foot"><a href="https://zeno.fm/player/tikpanradio" target="_blank" rel="noopener noreferrer">Listen on Zeno</a></div></div><div class="radio-dock"><button class="radio-trigger" id="radio-trigger" type="button" aria-controls="radio-panel" aria-label="Open live radio player" aria-expanded="false"><img class="radio-dock-logo" src="assets/Tikpan%20Radio%20Logo.png" alt=""><span class="trigger-text"><strong>Tikpan Radio</strong><small id="radio-dock-status">Listen live</small></span></button><button id="radio-play" class="radio-dock-play" type="button" aria-label="Play live radio"><span class="radio-play-icon" aria-hidden="true"></span></button><button class="radio-expand" id="radio-expand" type="button" aria-controls="radio-panel" aria-expanded="false" aria-label="Expand radio details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 14 5-5 5 5"/></svg></button></div></aside>
+</body>
+</html>
