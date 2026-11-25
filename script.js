@@ -180,6 +180,7 @@ function updateHeroScroll() {
   heroScene.style.setProperty('--fallback-scale', String(1 + smooth(.31, .76, progress) * 3.4));
   header.classList.toggle('is-scrolled', window.scrollY > 60);
   header.classList.toggle('is-hidden', !reducedMotion.matches && progress > .08 && featured.getBoundingClientRect().top > 150);
+  window.dispatchEvent(new Event('tikpan-hero-progress'));
 }
 const scheduleHeroScroll = () => {
   if (!heroScrollFrame) heroScrollFrame = requestAnimationFrame(updateHeroScroll);

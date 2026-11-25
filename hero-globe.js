@@ -10,7 +10,7 @@
     maps.src = 'assets/globe/globe-data.js?v=globe-journey-10';
     maps.onload = () => {
       const renderer = document.createElement('script');
-      renderer.src = 'globe-software.js?v=mobile-static-7';
+      renderer.src = 'globe-software.js?v=africa-still-1';
       document.head.append(renderer);
     };
     document.head.append(maps);

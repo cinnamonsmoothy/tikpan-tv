@@ -83,6 +83,7 @@ html{scroll-snap-type:none}
 .globe-stage.no-webgl .globe-canvas{display:none}
 .globe-canvas{z-index:2}
 .globe-canvas canvas{display:block;width:100%;height:100%}
+.globe-canvas .globe-still{position:absolute;left:0;top:0;width:1024px;height:1024px;max-width:none;transform-origin:0 0;will-change:transform;pointer-events:none}
 .globe-glow{z-index:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(204,147,66,.14),rgba(42,81,128,.07) 34%,transparent 65%);filter:blur(32px)}
 .globe-copy{position:relative;z-index:3;width:min(680px,52vw);padding:110px 0 160px;margin-left:clamp(24px,8vw,130px);pointer-events:none}
 .globe-copy>*{pointer-events:auto}

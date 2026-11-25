@@ -288,7 +288,7 @@
     return z > .035 ? [centerX + x * radius, centerY - y * radius, z] : null;
   }
 
-  function drawSignals(now, centerLon, centerLat, centerX, centerY, radius) {
+  function drawSignals(now, centerLon, centerLat, centerX, centerY, radius, context) {
     context.save();
     context.lineWidth = clamp(radius / 340, 1, 2);
     routes.forEach((route, index) => {
@@ -331,6 +331,9 @@
     context.restore();
   }
 
+  // Keep one Africa-facing bitmap for the zoom; only its compositor transform changes.
+  const freezeAt = .34;
+  let still = null;
   function render(now) {
     if (!texture || (!coverageMode && window.innerWidth <= 700)) return;
     const p = progress();
@@ -354,12 +357,42 @@
     const radius = baseRadius + (Math.max(width, height) * 1.18 - baseRadius) * zoom;
     const centerX = coverageMode ? width * .5 : width * (mobile ? .5 : .75 - .25 * smooth(.14, .6, p));
     const centerY = coverageMode ? height * .5 : height * (mobile ? .29 + .21 * smooth(.14, .6, p) : .5);
-    context.clearRect(0, 0, width, height);
+    if (!coverageMode && p >= freezeAt) {
+      if (!still) {
+        still = document.createElement('canvas');
+        still.width = still.height = 1024;
+        still.className = 'globe-still';
+        // Leave space around the rim for the atmosphere and signal glow.
+        paintGlobe(now, targetLon, targetLat, 512, 512, 480, still.getContext('2d'));
+        mount.append(still);
+      }
+      canvas.style.display = 'none';
+      if (gpuSphere) gpuSphere.canvas.style.display = 'none';
+      const scale = radius / 480;
+      still.style.transform = `translate3d(${centerX - 512 * scale}px,${centerY - 512 * scale}px,0) scale(${scale})`;
+      stage.classList.add('is-ready');
+      if (frame) { cancelAnimationFrame(frame); frame = 0; }
+      return;
+    }
+    if (still) { still.remove(); still = null; }
+    canvas.style.display = '';
+    if (gpuSphere) gpuSphere.canvas.style.display = '';
+    paintGlobe(now, centerLon, centerLat, centerX, centerY, radius);
+    stage.classList.add('is-ready');
+  }
+
+  function paintGlobe(now, centerLon, centerLat, centerX, centerY, radius, snapshotContext = null) {
+    const context = snapshotContext || canvas.getContext('2d');
+    const p = progress();
+    const mobile = window.innerWidth < 701;
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     if (gpuSphere) {
-      const size = coverageMode ? Math.min(768, Math.max(256, Math.ceil(radius * 2 * dpr))) : mobile ? (p > .42 ? 640 : 512) : (p > .42 ? 960 : 768);
+      const size = snapshotContext ? 960 : coverageMode ? Math.min(768, Math.max(256, Math.ceil(radius * 2 * dpr))) : 768;
       gpuSphere.draw(size, centerLon, centerLat, centerX, centerY, radius, now);
+      // Copy synchronously before WebGL clears its non-preserved drawing buffer.
+      if (snapshotContext) context.drawImage(gpuSphere.canvas, centerX - radius, centerY - radius, radius * 2, radius * 2);
     } else {
-      const size = coverageMode ? (mobile ? 256 : 320) : mobile ? (p > .42 ? 360 : 256) : (p > .42 ? 448 : 320);
+      const size = snapshotContext ? 640 : coverageMode && mobile ? 256 : 320;
       if (globeCanvas.width !== size) globeCanvas.width = globeCanvas.height = size;
       const sphere = geometry(size);
       const output = globeContext.createImageData(size, size);
@@ -406,8 +439,7 @@
     context.strokeStyle = 'rgba(127,193,230,.25)';
     context.lineWidth = clamp(radius * .008, 1, 4);
     context.stroke();
-    drawSignals(now, centerLon, centerLat, centerX, centerY, radius);
-    stage.classList.add('is-ready');
+    drawSignals(now, centerLon, centerLat, centerX, centerY, radius, context);
   }
 
   function resize() {
@@ -424,7 +456,7 @@
 
   function animate(now) {
     frame = 0;
-    if (!visible || document.hidden || (!coverageMode && (window.innerWidth <= 700 || progress() >= .88))) return;
+    if (!visible || document.hidden || (!coverageMode && (window.innerWidth <= 700 || progress() >= freezeAt))) return;
     const dt = Math.min((now - lastTime) / 1000, .05);
     lastTime = now;
     if (coverageMode && coverageReturning && !dragging && !reducedMotion.matches) {
@@ -453,7 +485,7 @@
     if (!reducedMotion.matches) frame = requestAnimationFrame(animate);
   }
   function start() {
-    if (!texture || frame || !visible || document.hidden || reducedMotion.matches || (!coverageMode && window.innerWidth <= 700)) return;
+    if (!texture || frame || !visible || document.hidden || reducedMotion.matches || (!coverageMode && (window.innerWidth <= 700 || progress() >= freezeAt))) return;
     lastTime = performance.now();
     frame = requestAnimationFrame(animate);
   }
@@ -532,11 +564,19 @@
     else if (visible) start();
   }, { threshold: .02 });
   observer.observe(stage);
-  window.addEventListener('scroll', () => {
-    updateCoverageProgress(true);
-    if (reducedMotion.matches) render(performance.now());
-    else start();
-  }, { passive: true });
+  if (coverageMode) {
+    window.addEventListener('scroll', () => {
+      updateCoverageProgress(true);
+      if (reducedMotion.matches) render(performance.now());
+      else start();
+    }, { passive: true });
+  } else {
+    // The hero publishes progress after calculating it, avoiding a stale scroll frame.
+    window.addEventListener('tikpan-hero-progress', () => {
+      if (progress() >= freezeAt || still || reducedMotion.matches) render(performance.now());
+      start();
+    });
+  }
   document.addEventListener('visibilitychange', start);
   reducedMotion.addEventListener('change', () => { render(performance.now()); start(); });
   new ResizeObserver(resize).observe(mount);
