@@ -165,7 +165,7 @@ radioButton.addEventListener('click',async()=>{
 function changeVolume(e){listenerVolume=Number(e.target.value)/100;applyVolume();if(audioContext?.state==='suspended')audioContext.resume().catch(()=>{})}
 volumeSlider.addEventListener('input',changeVolume);
 volumeSlider.addEventListener('change',changeVolume);
-function setRadio(open){radioPanel.classList.toggle('open',open);radioTrigger.setAttribute('aria-expanded',String(open));radioTrigger.setAttribute('aria-label',open?'Close live radio player':'Open live radio player');radioPanel.setAttribute('aria-hidden',String(!open));radioPanel.inert=!open;radioExpand.setAttribute('aria-expanded',String(open));radioExpand.setAttribute('aria-label',open?'Collapse radio details':'Expand radio details')}
+function setRadio(open){if(open)radioPanel.querySelectorAll('img[data-src]').forEach(image=>{image.src=image.dataset.src;image.removeAttribute('data-src')});radioPanel.classList.toggle('open',open);radioTrigger.setAttribute('aria-expanded',String(open));radioTrigger.setAttribute('aria-label',open?'Close live radio player':'Open live radio player');radioPanel.setAttribute('aria-hidden',String(!open));radioPanel.inert=!open;radioExpand.setAttribute('aria-expanded',String(open));radioExpand.setAttribute('aria-label',open?'Collapse radio details':'Expand radio details')}
 window.addEventListener('tikpan-menu-open',()=>setRadio(false));
 radioTrigger.addEventListener('click',()=>setRadio(!radioPanel.classList.contains('open')));
 radioExpand.addEventListener('click',()=>setRadio(!radioPanel.classList.contains('open')));

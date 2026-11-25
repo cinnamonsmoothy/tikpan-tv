@@ -49,6 +49,7 @@
   let velocityLon = 0, velocityLat = 0, pointerTime = 0;
   let lastTime = performance.now(), lastPaint = 0, frame = 0, visible = true;
   const geometryCache = new Map();
+  let sphereOutput;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const smooth = (start, end, value) => {
     const t = clamp((value - start) / (end - start), 0, 1);
@@ -383,7 +384,6 @@
 
   function paintGlobe(now, centerLon, centerLat, centerX, centerY, radius, snapshotContext = null) {
     const context = snapshotContext || canvas.getContext('2d');
-    const p = progress();
     const mobile = window.innerWidth < 701;
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     if (gpuSphere) {
@@ -395,7 +395,9 @@
       const size = snapshotContext ? 640 : coverageMode && mobile ? 256 : 320;
       if (globeCanvas.width !== size) globeCanvas.width = globeCanvas.height = size;
       const sphere = geometry(size);
-      const output = globeContext.createImageData(size, size);
+      // Reuse the pixel buffer instead of allocating it on every software frame.
+      if (sphereOutput?.width !== size) sphereOutput = globeContext.createImageData(size, size);
+      const output = sphereOutput;
       const target = output.data;
       const source = texture.data;
       const land = landMask.data;

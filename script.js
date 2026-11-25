@@ -100,6 +100,7 @@ function setMobileMenu(open, restoreFocus = true) {
   menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   if (open) {
     window.dispatchEvent(new Event('tikpan-menu-open'));
+    mobileNav.querySelectorAll('img[data-src]').forEach(image => { image.src = image.dataset.src; image.removeAttribute('data-src'); });
     mobileNav.hidden = false;
     mobileHeader.classList.add('has-mobile-menu');
     document.body.classList.add('menu-open');
@@ -146,6 +147,7 @@ const smooth = (start, end, value) => {
   return t * t * (3 - 2 * t);
 };
 let heroScrollFrame = 0;
+let lastHeroProgress = -1, lastHeroExit = -1, lastHeroWidth = 0, lastHeroHeight = 0;
 function updateHeroScroll() {
   heroScrollFrame = 0;
   header.classList.toggle('is-scrolled', window.scrollY > 60);
@@ -155,6 +157,12 @@ function updateHeroScroll() {
   const travel = Math.max(1, heroJourney.offsetHeight - window.innerHeight - heroScene.offsetHeight);
   const progress = reducedMotion.matches ? 0 : clamp(-bounds.top / travel);
   const exit = reducedMotion.matches ? 0 : clamp((window.innerHeight - bounds.bottom) / (window.innerHeight * .68));
+  header.classList.toggle('is-hidden', !reducedMotion.matches && progress > .08 && featured.getBoundingClientRect().top > 150);
+  if (progress === lastHeroProgress && exit === lastHeroExit && window.innerWidth === lastHeroWidth && window.innerHeight === lastHeroHeight) return;
+  lastHeroProgress = progress;
+  lastHeroExit = exit;
+  lastHeroWidth = window.innerWidth;
+  lastHeroHeight = window.innerHeight;
   window.tikpanHeroProgress = progress;
   if (window.innerWidth <= 700) {
     const globe = document.getElementById('globe-stage');
@@ -178,8 +186,6 @@ function updateHeroScroll() {
   heroScene.style.setProperty('--title-rise', `${Math.round((1 - reveal) * 45 - exit * 70)}px`);
   heroScene.style.setProperty('--line-scale', String(reveal));
   heroScene.style.setProperty('--fallback-scale', String(1 + smooth(.31, .76, progress) * 3.4));
-  header.classList.toggle('is-scrolled', window.scrollY > 60);
-  header.classList.toggle('is-hidden', !reducedMotion.matches && progress > .08 && featured.getBoundingClientRect().top > 150);
   window.dispatchEvent(new Event('tikpan-hero-progress'));
 }
 const scheduleHeroScroll = () => {
@@ -251,6 +257,59 @@ starFields.forEach(starField => {
   }
   starField.append(stars);
 });
+
+// Decorative work follows visibility; live radio playback stays independent.
+const backdrops = [...document.querySelectorAll('.radio-backdrop')];
+const nearbyVideos = new WeakSet();
+const visibleVideos = new WeakSet();
+function loadBackdrop(video) {
+  if (video.dataset.loaded || reducedMotion.matches) return;
+  video.querySelectorAll('source[data-src]').forEach(source => { source.src = source.dataset.src; });
+  video.dataset.loaded = 'true';
+  video.load();
+}
+function syncBackdrops() {
+  backdrops.forEach(video => {
+    if (nearbyVideos.has(video) && !document.hidden) loadBackdrop(video);
+    if (visibleVideos.has(video) && !document.hidden && !reducedMotion.matches) {
+      video.play().catch(() => {});
+    } else video.pause();
+  });
+  document.documentElement.classList.toggle('motion-suspended', document.hidden);
+}
+if ('IntersectionObserver' in window) {
+  const warmObserver = new IntersectionObserver(entries => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (target.matches('video')) {
+        if (isIntersecting) nearbyVideos.add(target);
+        else nearbyVideos.delete(target);
+      } else if (isIntersecting) {
+        target.classList.add('is-background-ready');
+        warmObserver.unobserve(target);
+      }
+    });
+    syncBackdrops();
+  }, { rootMargin: '800px' });
+  [...backdrops, ...document.querySelectorAll('.closing-backdrop')].forEach(element => warmObserver.observe(element));
+  const motionObserver = new IntersectionObserver(entries => {
+    entries.forEach(({ target, isIntersecting }) => {
+      target.classList.toggle('is-animation-visible', isIntersecting);
+      if (target.matches('video')) {
+        if (isIntersecting) visibleVideos.add(target);
+        else visibleVideos.delete(target);
+      }
+    });
+    syncBackdrops();
+  });
+  [...starFields, ...backdrops, ...document.querySelectorAll('.radio-art')].forEach(element => motionObserver.observe(element));
+} else {
+  document.querySelectorAll('.closing-backdrop').forEach(element => element.classList.add('is-background-ready'));
+  [...starFields, ...document.querySelectorAll('.radio-art')].forEach(element => element.classList.add('is-animation-visible'));
+  backdrops.forEach(video => { nearbyVideos.add(video); visibleVideos.add(video); });
+  syncBackdrops();
+}
+document.addEventListener('visibilitychange', syncBackdrops);
+reducedMotion.addEventListener('change', syncBackdrops);
 
 const radioArt = document.querySelector('.radio-art');
 const radioPieces = radioArt ? [...radioArt.querySelectorAll('[data-parallax]')] : [];

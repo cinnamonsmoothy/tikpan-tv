@@ -2,13 +2,14 @@
 .about-document{scroll-snap-type:none}
 .about-page .site-header{background:rgba(3,3,3,.94)}
 .about-page [aria-current="page"]{color:var(--red)}
+@media(max-width:700px){.about-page .about-intro:before{background-image:url('assets/optimized/tikpan-studio-960.webp')}}
 .about-page section[id]{scroll-margin-top:6rem}
 .about-story-bridge{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:clamp(18rem,30vh,25rem);padding:4rem 1.5rem;background:#030303}
 .about-story-bridge>.hero-stars{z-index:0}
 .about-story-bridge>.solid-button{position:relative;z-index:1;transform:translateY(-1.75rem)}
 .about-kicker{margin:0 0 1.5rem;color:var(--red);font:800 .6875rem/1.5 var(--font);letter-spacing:.16em;text-transform:uppercase}
 .about-intro{position:relative;overflow:hidden;display:flex;align-items:center;min-height:clamp(34rem,76svh,48rem);padding-top:9rem;padding-bottom:5rem;background:#030303}
-.about-intro:before{content:"";position:absolute;inset:0;background:url('Tikpan%20TV%20News%20Studio.png') center/cover no-repeat;filter:brightness(.27) saturate(.8);pointer-events:none}
+.about-intro:before{content:"";position:absolute;inset:0;background:url('assets/optimized/tikpan-studio.webp') center/cover no-repeat;filter:brightness(.27) saturate(.8);pointer-events:none}
 .about-intro:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.68) 50%,rgba(0,0,0,.42));pointer-events:none}
 .about-intro-inner{position:relative;z-index:1;width:100%;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(18rem,.75fr);align-items:center;gap:clamp(3rem,7vw,8rem)}
 .about-intro-copy{max-width:none}
